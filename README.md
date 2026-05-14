@@ -63,3 +63,21 @@ obra-conecta/
 ├── docs/
 ├── README.md
 └── package.json
+
+
+## Uso de ramas en el proyecto
+
+Las ramas en Git permiten trabajar en nuevas funcionalidades o cambios sin afectar la versión principal del proyecto.
+
+Gracias a las ramas, cada integrante puede desarrollar partes del sistema de forma independiente, realizar pruebas y luego unir los cambios al proyecto principal de manera organizada y segura.
+
+En Obra Conecta se utilizarán ramas para:
+- Desarrollar nuevas funcionalidades
+- Corregir errores
+- Realizar pruebas
+- Mejorar el diseño y rendimiento del sistema
+
+La rama principal será:
+
+```bash
+main
