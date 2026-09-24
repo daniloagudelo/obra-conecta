@@ -13,17 +13,24 @@ from app.routers import (
     usuarios,
 )
 
-# Inicialización de la aplicación FastAPI
 app = FastAPI(
     title="Obra Conecta API",
     description="API para conectar clientes con profesionales de construcción.",
     version="1.0.0",
 )
 
-# Configuración Global de CORS para permitir solicitudes desde cualquier frontend (Vercel, Localhost, etc.)
+# Lista de orígenes permitidos explícita para evitar bloqueos con credenciales
+origins = [
+    "https://obra-conecta.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:5173",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",  # Permite cualquier preview/despliegue de Vercel
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
