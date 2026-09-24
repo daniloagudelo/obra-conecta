@@ -10,24 +10,20 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Lista explicita de origenes permitidos
+origins = [
+    "https://obra-conecta.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:5173",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins_list,
+    allow_origins=origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
-app.include_router(usuarios.router)
-app.include_router(categorias.router)
-app.include_router(profesionales.router)
-app.include_router(solicitudes.router)
-app.include_router(cotizaciones.router)
-app.include_router(mensajes.router)
-app.include_router(estadisticas.router)
-
-
-@app.get("/")
-def raiz():
-    return {"mensaje": "Obra Conecta API activa. Documentación en /docs"}
