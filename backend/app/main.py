@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.core.config import settings
 from app.routers import (
@@ -19,24 +20,21 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Lista de orígenes permitidos explícita para evitar bloqueos con credenciales
-origins = [
-    "https://obra-conecta.vercel.app",
-    "http://localhost:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:5173",
-]
-
+# 1. Configuración de CORS amplia para desarrollo y producción
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_origin_regex=r"https://.*\.vercel\.app",  # Permite cualquier preview/despliegue de Vercel
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=["*"],
+    allow_credentials=False,  # Cambiado a False para permitir "*" en allow_origins sin conflictos de navegador
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
 )
 
-# Inclusión de Routers (Endpoints de la API)
+# 2. Manejador global para responder 200 OK a cualquier petición OPTIONS (Preflight)
+@app.options("/{full_path:path}")
+async def options_handler(full_path: str):
+    return Response(status_code=200)
+
+# Inclusión de Routers
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(usuarios.router, prefix="/api/v1/usuarios", tags=["usuarios"])
 app.include_router(categorias.router, prefix="/api/v1/categorias", tags=["categorias"])
